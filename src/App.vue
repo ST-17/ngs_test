@@ -77,7 +77,7 @@ body {
   padding: 10px;
   border-radius: 10px;
 }
-.rerenderBtn button{
+.rerenderBtn button {
   display: inline-flex;
   align-items: center;
   padding: 0.8rem 2rem;

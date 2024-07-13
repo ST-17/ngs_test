@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div
-      class="tree-node"
-      @click="toggle"
-      :class="{ 'has-children': hasChildren, 'open-node': node.isOpen }"
-    >
+  <div
+    class="tree-node"
+    @click="toggle"
+    :class="{ 'has-children': hasChildren, 'open-node': node.isOpen, 'even-bg': node.order_id % 2 === 0, 'odd-bg': node.order_id % 2 !== 0 }"
+  >
+    <div class="tree-item">
       <span
         :class="{
           'arrow-right': !node.isOpen,
@@ -14,27 +14,28 @@
       ></span>
       {{ node.title }}
     </div>
-    <div v-if="node.isOpen" class="tree-children">
-      <tree-node v-for="child in node.children" :key="child.id" :node="child" />
-    </div>
+  </div>
+  <div v-if="node.isOpen" class="tree-children">
+    <tree-node v-for="child in node.children" :key="child.id" :node="child" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from "vue";
+import { Node } from "../types/node";
+import { defineProps, computed, PropType } from "vue";
 
 const props = defineProps({
   node: {
-    type: Object,
+    type: Object as PropType<Node>,
     required: true,
   },
 });
 
 const toggle = function () {
-  if (props.node.children.length) props.node.isOpen = !props.node.isOpen;
+  if (props.node.children?.length) props.node.isOpen = !props.node.isOpen;
 };
 
-const hasChildren = computed(() => props.node.children.length !== 0);
+const hasChildren = computed(() => props.node.children?.length !== 0);
 </script>
 
 <style scoped>
@@ -44,27 +45,47 @@ const hasChildren = computed(() => props.node.children.length !== 0);
   margin-bottom: 10px;
   border-bottom: 1px solid #9c9c9c;
 }
+
+.tree-item {
+  display: flex;
+  align-items: center;
+}
+
 .open-node {
   font-weight: 700;
 }
+
 .has-children {
   cursor: pointer;
 }
+
 .tree-node span {
   margin-right: 5px;
   display: inline-block;
   width: 10px;
 }
+
 .arrow-right::before {
   content: "▶";
 }
+
 .arrow-down::before {
   content: "▼";
 }
+
 .minus::before {
   content: "";
 }
+
 .tree-children {
   padding-left: 20px;
+}
+
+.even-bg {
+  background-color: #ababab;
+}
+
+.odd-bg {
+  background-color: #6e6e6e;
 }
 </style>

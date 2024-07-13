@@ -4,4 +4,5 @@ export interface Node {
   id: string;
   isOpen: boolean;
   children?: Node[];
+  order_id: number;
 }
